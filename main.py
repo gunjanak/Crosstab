@@ -84,9 +84,12 @@ def main():
 
             st.write(output_df)
             
+            #End of basic part
+
+            #Begin of loc
             st.write('For Major index only')
             i=1
-            st.write(output_df.index.get_level_values(0).unique())
+            st.write(output_df.index.get_level_values(1).unique())
             particular_index = st.multiselect('Select value of index of your choice:',output_df.index.get_level_values(0).unique())
             st.write(type(particular_index))
             st.write(output_df.loc[particular_index])
