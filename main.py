@@ -2,6 +2,7 @@
 import numpy as np
 import streamlit as st
 import pandas as pd
+import numpy as np
 
 
 
@@ -73,7 +74,7 @@ def main():
             #creating array of index selected to be fed in crosstab function
             column_list = []
             for i in range(no_of_columns):
-                print(columns[i])
+                #print(columns[i])
                 element = df[columns[i]]
                 column_list.append(element)
 
@@ -87,31 +88,78 @@ def main():
             #End of basic part
 
             #Begin of loc
-            st.write('For Major index only')
-            i=1
-            st.write(output_df.index.get_level_values(i).unique())
-            particular_index = st.multiselect('Select value of index of your choice:',output_df.index.get_level_values(i).unique())
-            st.write(type(particular_index))
-            st.write(output_df.loc[particular_index])
-            #https://towardsdatascience.com/working-with-multi-index-pandas-dataframes-f64d2e2c3e02
 
-            st.write('For nested index')
-            particular_index = st.multiselect('Select value of index of your choice:',output_df.index)
-            st.write(type(particular_index))
-            st.write(output_df.loc[particular_index])
+            st.write('Loc operation')
+            options = ['Single Layer Index-Single Layer Column',
+            'Multi Layer Index-Single Layer Column',
+            'Single Layer Index-Multi Layer Column',
+            'Multi Layer Index-Multi Layer Column']
+            Level_of_index = len(indexx)
+            st.write(Level_of_index)
+            Level_of_column = len(columns)
+            st.write(Level_of_column)
 
-            
+            option_selected = st.selectbox('Select type of operation that you want:',
+            options)
+            st.write(option_selected)
+
+            if(option_selected == 'Single Layer Index-Single Layer Column'):
+                st.write('For Major index only')
+                i=0
+                st.write(output_df.index.get_level_values(i).unique())
+                particular_index = st.multiselect('Select value of index of your choice:',output_df.index.get_level_values(i).unique())
+                particular_col = st.multiselect('Select value of columns of your choice:',output_df.columns.get_level_values(i).unique())
+
+                st.write(type(particular_index))
+                if(len(particular_index)==0):
+                    st.write(output_df.loc[:,particular_col])
+                elif(len(particular_col)==0):
+                    st.write(output_df.loc[particular_index])
+                else:
+                    st.write(output_df.loc[particular_index,particular_col])
+
+            elif(option_selected == 'Multi Layer Index-Single Layer Column'):
+                if(Level_of_index > 0):
+                    st.write('For nested index')
+                    list_of_multi_level_index = output_df.index
+                    particular_index = st.multiselect('Select value of index of your choice:',list_of_multi_level_index)
+                    particular_col = st.multiselect('Select value of columns of your choice:',output_df.columns.get_level_values(0).unique())
+                if(len(particular_col)==0):
+                    st.write(output_df.loc[particular_index])
+                
+                else:
+                    st.write(output_df.loc[particular_index,particular_col])
+
+            elif(option_selected == 'Single Layer Index-Multi Layer Column'):
+                if(Level_of_column > 0):
+                    st.write('For nested columns')
+                    list_of_multi_level_column = output_df.columns
+                    particular_index = st.multiselect('Select value of index of your choice:',output_df.index.get_level_values(0).unique())
+                    particular_col = st.multiselect('Select value of columns of your choice:',list_of_multi_level_column)
+                
+                if(len(particular_index)==0):
+                    st.write(output_df.loc[:,particular_col])
+                
+                else:
+                    st.write(output_df.loc[particular_index,particular_col])
+                        
+            elif(option_selected == 'Multi Layer Index-Multi Layer Column'):
+                if(Level_of_column > 0 and Level_of_index > 0):
+                    st.write('For nested columns')
+                    list_of_multi_level_index = output_df.index
+                    list_of_multi_level_column = output_df.columns
+                    particular_index = st.multiselect('Select value of index of your choice:',list_of_multi_level_index)
+                    particular_col = st.multiselect('Select value of columns of your choice:',list_of_multi_level_column)
+                
+                if(len(particular_index)==0):
+                    st.write(output_df.loc[:,particular_col])
+                elif(len(particular_col) == 0):
+                    st.write(output_df.loc[particular_index])
+                else:
+                    st.write(output_df.loc[particular_index,particular_col])
 
 
-
-
-
-
-
-      
-
-
-    
+            st.write('Make option to save the processed dataframe')
 
 
 if __name__ == '__main__':
