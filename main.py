@@ -11,11 +11,19 @@ import templates
 def load_data():
     st.write("Upload a csv file")
     uploaded_file = st.file_uploader("Choose a file",'csv')
-    st.write(uploaded_file)
-    if(uploaded_file == None):
-        status = False
-    else:
+    use_example_file = st.checkbox("Use example file",False,help="Use in-built example file for demo")
+
+    status = False
+    if use_example_file:
+        uploaded_file = "default_file.csv"
         status = True
+    
+    if uploaded_file:
+        st.write(uploaded_file)
+        if(uploaded_file == None):
+            status = False
+        else:
+            status = True
 
     to_return = [uploaded_file,status]
     return to_return
@@ -66,7 +74,6 @@ def main():
             #creating array of index selected to be fed in crosstab function
             index_list = []
             for i in range(no_of_index):
-                print(indexx[i])
                 element = df[indexx[i]]
                 index_list.append(element)
 

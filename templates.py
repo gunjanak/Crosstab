@@ -23,7 +23,7 @@ def template1(output_df):
     cols = output_df.columns
     new_cols = []
     for col in cols:
-        print(col)
+        
         count_tuple = (col,'Count')
         new_cols.append(count_tuple)
         pec_tuple = (col,"Pec")
@@ -32,6 +32,15 @@ def template1(output_df):
     final_df.columns=pd.MultiIndex.from_tuples(new_cols)
     final_df['Sum'] = sum
     final_df.loc['Total'] = final_df.sum()
+    total_values = final_df.loc['Total'].values
+    final_total_values = []
+    for i in range(len(total_values)-1):
+        if((i+1)%2 != 0):
+            total_values[i+1] = round((total_values[i]/total_values[-1])*100,2)
+            final_total_values.append(total_values[i+1])
+        
+
+ 
 
     return final_df
 
@@ -61,6 +70,13 @@ def template2(output_df):
     final_df.columns=pd.MultiIndex.from_tuples(new_cols)
     final_df['Sum'] = sum
     final_df.loc['Total'] = final_df.sum()
+    total_values = final_df.loc['Total'].values
+    final_total_values = []
+    for i in range(len(total_values)-1):
+        if((i+1)%2 != 0):
+            total_values[i+1] = round((total_values[i]/total_values[-1])*100,2)
+            final_total_values.append(total_values[i+1])
+        
 
 
 
